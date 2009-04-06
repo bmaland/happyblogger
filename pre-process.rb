@@ -15,13 +15,14 @@ def process(post)
   cats = (doc/'span.tag').remove
   cats = (cats/'span').map(&:inner_html).map(&:downcase)
 
-  # remove h2 title
-  (doc/'h2#sec-1').remove
+  # extract h2 title
+  h2 = (doc/'h2#sec-1').remove
   post = doc.search('div#outline-container-1').inner_html
 
   # Extract metadata and insert yaml
   meta = {}
   meta['layout'] = 'post'
+  meta['title'] = h2.inner_html.gsub('&nbsp;', '').strip # insert h2 title
   meta['categories'] = cats unless cats.empty?
 
   meta = meta.to_yaml + "---\n\n"
