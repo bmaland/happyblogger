@@ -31,7 +31,7 @@ def process(post)
   post
 end
 
-['./jekyll-root/_posts/*.html', './jekyll-root/pages/*.html'].each do |glob|
+['./_posts/*.html', './pages/*.html'].each do |glob|
   Dir.glob(glob).each do |f|
     file = File.open(f, "r")
     post = process(file.read)

@@ -1,9 +1,9 @@
 (setq org-publish-project-alist
       '(
         ("blog-posts"
-         :base-directory "~/blog/posts/"
+         :base-directory "~/blog/_org/posts/"
          :base-extension "org"
-         :publishing-directory "~/happyblogger/jekyll-root/_posts"
+         :publishing-directory "~/blog/_posts"
          :inline-images t
          :table-of-contents nil
          :drawers nil
@@ -14,9 +14,9 @@
          :auto-postamble nil
          )
         ("blog-pages"
-         :base-directory "~/blog/pages/"
+         :base-directory "~/blog/_org/pages/"
          :base-extension "org"
-         :publishing-directory "~/happyblogger/jekyll-root/pages"
+         :publishing-directory "~/blog/pages"
          :inline-images t
          :table-of-contents nil
          :drawers nil
