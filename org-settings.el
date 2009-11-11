@@ -13,7 +13,7 @@
          :auto-preamble nil
          :auto-postamble nil
          )
-        ("blog-pages"
+        ("blog-pages" ;; This section is optional.
          :base-directory "~/blog/_org/pages/"
          :base-extension "org"
          :publishing-directory "~/blog/pages"
