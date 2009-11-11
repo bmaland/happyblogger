@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>Your Blog Title</title>
+ <link type="application/atom+xml" rel="self" href="http://domain/atom.xml"/>
+ <link type="text/html" rel="alternate" href="http://domain/"/>
+ <updated>2009-11-11T19:10:04+01:00</updated>
+ <id>http://domain/</id>
+ <author>
+   <name>Your Name</name>
+   <email>your@email.com</email>
+ </author>
+
+ 
+ <entry>
+   <title>Why every programmer should play Nethack</title>
+   <link href="http://domain/2007/10/29/why-every-programmer-should-play-nethack.html"/>
+   <updated>2007-10-29T00:00:00+01:00</updated>
+   <id>http://domain/2007/10/29/why-every-programmer-should-play-nethack</id>
+   <content type="html">
+
+
+&lt;div class=&quot;outline-text-2&quot; id=&quot;text-1&quot;&gt;
+
+
+&lt;p&gt;
+Yeah.
+&lt;/p&gt;&lt;/div&gt;
+</content>
+ </entry>
+ 
+
+</feed>
