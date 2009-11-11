@@ -5,36 +5,66 @@
 
 require "rubygems"
 require "hpricot"
+require "yaml"
+require "time"
 
-def process(post)
+def process_post(post, layout)
   # Check if the post already has been processed (look for YAML header)
   return nil if post[0..2] == '---'
 
   # Strip off everything outside the main div & extract categories
   doc = Hpricot(post)
   cats = (doc/'span.tag').remove
-  cats = (cats/'span').map(&:inner_html).map(&:downcase)
+  cats = (cats/'span').map { |i| i.inner_html }.map { |i| i.downcase }
 
-  # extract h2 title
+  # Extract h2 title
   h2 = (doc/'h2#sec-1').remove
+
+  # Extract timestamp
+  timestamp = (doc/'span.timestamp-wrapper').remove
+  if timestamp
+    br = (doc/'div#text-1 p br:first')
+    br.remove unless br.none? # Remove <br /> right after timestamp-wrapper
+    # I use europen date format, must do some conversion to make Time.parse work
+    t = timestamp.search('span.timestamp').inner_html
+    unless t.nil? or t.empty?
+      t = t.split # 03/06/09 Wed 15:00
+      tt = t[0].split('/') # 03/06/09
+      tt = [tt[2], tt[1], tt[0]].join('/') # Euro -> US date
+      if t[2] # If the timestamp includes time
+        date = Time.parse("#{tt} #{t[2]} +2") # +2 is my local time zone offset
+      else # only date
+        date = Time.parse("#{tt} +2")
+      end
+    end
+  end
+
+  # Extract the top outline
   post = doc.search('div#outline-container-1').inner_html
+
+  # Extract footnotes, if any, and downgrade h2 to h3
+  footnotes = doc.search('div#footnotes').inner_html.gsub("h2", "h3")
 
   # Extract metadata and insert yaml
   meta = {}
-  meta['layout'] = 'post'
+  meta['layout'] = layout
   meta['title'] = h2.inner_html.gsub('&nbsp;', '').strip # insert h2 title
   meta['categories'] = cats unless cats.empty?
+  meta['date'] = date if date
 
   meta = meta.to_yaml + "---\n\n"
-  post = meta + post
 
-  post
+  # Return the whole thing
+  return meta + post + footnotes
 end
 
-['./_posts/*.html', './pages/*.html'].each do |glob|
+def process(glob, layout)
   Dir.glob(glob).each do |f|
     file = File.open(f, "r")
-    post = process(file.read)
+    post = process_post(file.read, layout)
     File.open(f, "w").write(post) if post
   end
 end
+
+process("#{File.dirname(__FILE__)}/_posts/*.html", "post")
+process("#{File.dirname(__FILE__)}/pages/*.html", "page")
